@@ -5,37 +5,20 @@ import numpy as np
 from torch import cpu
 from ultralytics import YOLO
 
-def record():
-    # Open the default camera
-    cam = cv2.VideoCapture(1)
 
-    # Get the default frame width and height
-    frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
-    frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
+def detect_card():
+    model = YOLO("pokemon_card_detector_12_8_2024.pt")
 
-    # Define the codec and create VideoWriter object
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    out = cv2.VideoWriter('output.mp4', fourcc, 60.0, (frame_width, frame_height))
+    model.predict(source= "0", show=True, save=False, conf=0.2, line_width=2, save_crop = False, save_txt = False, show_labels = True, show_conf = True, classes=[0])
 
-    while True:
-        ret, frame = cam.read()
 
-        # Write the frame to the output file
-        out.write(frame)
+def train():
+    # Create a new YOLO model from scratch
+    model = YOLO("yolo11n.yaml")
 
-        # Display the captured frame
-        cv2.imshow('Camera', frame)
+    model.train(data="dataset_custom.yaml", imgsz=640, batch=120, epochs=200, workers=1, device=0)
 
-        # Press 'q' to exit the loop
-        if cv2.waitKey(1) == ord('q'):
-            break
 
-    # Release the capture and writer objects
-    cam.release()
-    out.release()
-    cv2.destroyAllWindows()
-
-# Create a new YOLO model from scratch
-model = YOLO("yolo11n.yaml")
-
-model.train(data = "dataset_custom.yaml", imgsz = 640, batch = 120, epochs = 200, workers = 1, device=cpu)
+if __name__ == "__main__":
+    # train()
+    detect_card()

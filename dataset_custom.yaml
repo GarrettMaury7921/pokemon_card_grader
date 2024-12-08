@@ -1,6 +1,6 @@
 train: C:\Users\garre\PycharmProjects\pokemon_card_grader\train
 val: C:\Users\garre\PycharmProjects\pokemon_card_grader\val
 
-nc: 2
+nc: 1
 
-names:["pokemon_card"]
+names: ["pokemon_card"]
